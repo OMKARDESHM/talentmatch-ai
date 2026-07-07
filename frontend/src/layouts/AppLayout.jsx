@@ -19,6 +19,26 @@ function getNavigation(role) {
       to: "/candidate",
       end: true,
     },
+    {
+      label: "Profile",
+      to: "/candidate/profile",
+      end: true,
+    },
+    {
+      label: "Search jobs",
+      to: "/candidate/jobs",
+      end: true,
+    },
+    {
+      label: "Job matching",
+      to: "/candidate/matching",
+      end: true,
+    },
+    {
+      label: "Applications",
+      to: "/candidate/applications",
+      end: true,
+    },
   ];
 }
 
@@ -34,6 +54,7 @@ export default function AppLayout() {
             <div className="brand-mark" aria-hidden="true">
               TM
             </div>
+
             <div>
               <strong>TalentMatch AI</strong>
               <span>Job matching workspace</span>

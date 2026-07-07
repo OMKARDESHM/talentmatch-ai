@@ -10,6 +10,10 @@ import LoadingScreen from "./components/LoadingScreen";
 import AppLayout from "./layouts/AppLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import CandidateDashboardPage from "./pages/candidate/CandidateDashboardPage";
+import CandidateProfilePage from "./pages/candidate/CandidateProfilePage";
+import JobMatchingPage from "./pages/candidate/JobMatchingPage";
+import JobSearchPage from "./pages/candidate/JobSearchPage";
+import MyApplicationsPage from "./pages/candidate/MyApplicationsPage";
 import LoginPage from "./pages/shared/LoginPage";
 import NotFoundPage from "./pages/shared/NotFoundPage";
 
@@ -53,6 +57,22 @@ export default function App() {
           <Route
             path="/candidate"
             element={<CandidateDashboardPage />}
+          />
+          <Route
+            path="/candidate/profile"
+            element={<CandidateProfilePage />}
+          />
+          <Route
+            path="/candidate/jobs"
+            element={<JobSearchPage />}
+          />
+          <Route
+            path="/candidate/matching"
+            element={<JobMatchingPage />}
+          />
+          <Route
+            path="/candidate/applications"
+            element={<MyApplicationsPage />}
           />
         </Route>
       </Route>

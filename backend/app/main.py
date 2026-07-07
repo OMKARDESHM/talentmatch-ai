@@ -6,6 +6,7 @@ from fastapi import FastAPI
 import app.models  # noqa: F401
 from app.database import Base, engine
 from app.routes import (
+    admin_applications_router,
     applications_router,
     auth_router,
     candidates_router,
@@ -30,6 +31,7 @@ app.include_router(auth_router)
 app.include_router(jobs_router)
 app.include_router(candidates_router)
 app.include_router(applications_router)
+app.include_router(admin_applications_router)
 
 @app.get("/health", tags=["System"])
 def health_check() -> dict[str, str]:

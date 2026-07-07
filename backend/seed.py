@@ -2,6 +2,7 @@ import json
 
 from sqlalchemy import select
 
+from app.auth import hash_password
 from app.database import Base, SessionLocal, engine
 from app.models import (
     Application,
@@ -28,13 +29,13 @@ def seed_database() -> None:
 
         admin = User(
             email="admin@talentmatch.dev",
-            password_hash="temporary-seed-password",
+            password_hash=hash_password("AdminPass123!"),
             role=UserRole.ADMIN.value,
         )
 
         candidate_user = User(
             email="candidate@talentmatch.dev",
-            password_hash="temporary-seed-password",
+            password_hash=hash_password("CandidatePass123!"),
             role=UserRole.CANDIDATE.value,
         )
 
@@ -167,8 +168,8 @@ def seed_database() -> None:
         db.commit()
 
         print("Seed data created successfully.")
-        print(f"Users created: 2")
-        print(f"Candidate profiles created: 1")
+        print("Users created: 2")
+        print("Candidate profiles created: 1")
         print(f"Jobs created: {len(jobs)}")
         print("Applications created: 1")
 

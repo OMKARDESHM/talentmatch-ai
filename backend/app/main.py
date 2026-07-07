@@ -11,6 +11,7 @@ from app.routes import (
     auth_router,
     candidates_router,
     jobs_router,
+    matching_router,
 )
 
 
@@ -32,6 +33,8 @@ app.include_router(jobs_router)
 app.include_router(candidates_router)
 app.include_router(applications_router)
 app.include_router(admin_applications_router)
+app.include_router(matching_router)
+
 
 @app.get("/health", tags=["System"])
 def health_check() -> dict[str, str]:

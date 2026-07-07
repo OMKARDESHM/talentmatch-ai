@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 import app.models  # noqa: F401
 from app.database import Base, engine
-from app.routes import auth_router
+from app.routes import auth_router, jobs_router
 
 
 @asynccontextmanager
@@ -22,6 +22,7 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(jobs_router)
 
 
 @app.get("/health", tags=["System"])

@@ -1,8 +1,7 @@
-from datetime import datetime
-
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.models import JobStatus
+from app.schemas.common import UtcDateTime
 
 
 class JobCreateRequest(BaseModel):
@@ -42,5 +41,5 @@ class JobResponse(BaseModel):
     domain: str
     status: str
     created_by_id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: UtcDateTime
+    updated_at: UtcDateTime

@@ -10,6 +10,7 @@ from app.schemas.candidate import (
     CandidateProfileResponse,
     CandidateProfileUpdate,
 )
+from app.schemas.common import UtcDateTime
 from app.schemas.matching import (
     InterpretedIntentResponse,
     JobMatchRequest,
@@ -28,4 +29,5 @@ __all__ = [
     "JobMatchRequest",
     "JobMatchResponse",
     "JobMatchResult",
+    "UtcDateTime",
 ]

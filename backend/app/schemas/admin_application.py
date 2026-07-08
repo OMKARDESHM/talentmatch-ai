@@ -1,9 +1,9 @@
-from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
 from app.models import ApplicationStatus
+from app.schemas.common import UtcDateTime
 
 
 class ApplicationStatusUpdate(BaseModel):
@@ -18,5 +18,5 @@ class AdminApplicationResponse(BaseModel):
     job_id: int
     status: ApplicationStatus
     profile_snapshot: dict[str, Any]
-    applied_at: datetime
-    updated_at: datetime
+    applied_at: UtcDateTime
+    updated_at: UtcDateTime

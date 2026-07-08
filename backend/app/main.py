@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import app.models  # noqa: F401
 from app.config import settings
 from app.database import Base, engine
+from app.middleware import RequestContextMiddleware
 from app.routes import (
     admin_applications_router,
     analytics_router,
@@ -41,6 +42,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(RequestContextMiddleware)
 
 app.include_router(auth_router)
 app.include_router(jobs_router)

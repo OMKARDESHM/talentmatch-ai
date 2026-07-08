@@ -48,7 +48,9 @@ export default function LoginPage() {
   }, [email, password]);
 
   if (isInitializing) {
-    return <LoadingScreen />;
+    return (
+      <LoadingScreen message="Restoring your TalentMatch session..." />
+    );
   }
 
   if (isAuthenticated) {

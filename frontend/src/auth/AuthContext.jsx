@@ -5,10 +5,18 @@ import {
   useState,
 } from "react";
 
-import { apiRequest } from "../api/client";
+import {
+  ApiError,
+  apiRequest,
+} from "../api/client";
 import { AuthContext } from "./auth-context";
 
 const TOKEN_STORAGE_KEY = "talentmatch_access_token";
+
+const SESSION_RESTORE_ERROR_MESSAGE =
+  "The TalentMatch API is temporarily unavailable. "
+  + "Your saved session has been preserved. "
+  + "Retry when the API is reachable.";
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() =>
@@ -16,11 +24,17 @@ export function AuthProvider({ children }) {
   );
   const [user, setUser] = useState(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [
+    sessionRestoreError,
+    setSessionRestoreError,
+  ] = useState("");
+  const [restoreAttempt, setRestoreAttempt] = useState(0);
 
   const clearSession = useCallback(() => {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     setToken(null);
     setUser(null);
+    setSessionRestoreError("");
   }, []);
 
   useEffect(() => {
@@ -28,9 +42,14 @@ export function AuthProvider({ children }) {
 
     async function restoreSession() {
       if (!token) {
+        setUser(null);
+        setSessionRestoreError("");
         setIsInitializing(false);
         return;
       }
+
+      setIsInitializing(true);
+      setSessionRestoreError("");
 
       try {
         const currentUser = await apiRequest("/auth/me", {
@@ -40,9 +59,22 @@ export function AuthProvider({ children }) {
 
         setUser(currentUser);
       } catch (error) {
-        if (error.name !== "AbortError") {
-          clearSession();
+        if (error.name === "AbortError") {
+          return;
         }
+
+        if (
+          error instanceof ApiError
+          && error.status === 401
+        ) {
+          clearSession();
+          return;
+        }
+
+        setUser(null);
+        setSessionRestoreError(
+          SESSION_RESTORE_ERROR_MESSAGE,
+        );
       } finally {
         if (!controller.signal.aborted) {
           setIsInitializing(false);
@@ -55,7 +87,19 @@ export function AuthProvider({ children }) {
     return () => {
       controller.abort();
     };
-  }, [token, clearSession]);
+  }, [
+    token,
+    clearSession,
+    restoreAttempt,
+  ]);
+
+  const retrySessionRestore = useCallback(() => {
+    if (!token) {
+      return;
+    }
+
+    setRestoreAttempt((attempt) => attempt + 1);
+  }, [token]);
 
   const login = useCallback(async (email, password) => {
     const response = await apiRequest("/auth/login", {
@@ -76,6 +120,7 @@ export function AuthProvider({ children }) {
     );
     setToken(response.access_token);
     setUser(currentUser);
+    setSessionRestoreError("");
 
     return currentUser;
   }, []);
@@ -90,6 +135,8 @@ export function AuthProvider({ children }) {
       user,
       isAuthenticated: Boolean(token && user),
       isInitializing,
+      sessionRestoreError,
+      retrySessionRestore,
       login,
       logout,
     }),
@@ -97,6 +144,8 @@ export function AuthProvider({ children }) {
       token,
       user,
       isInitializing,
+      sessionRestoreError,
+      retrySessionRestore,
       login,
       logout,
     ],

@@ -7,6 +7,8 @@ from app.routes.auth import router as auth_router
 from app.routes.candidates import router as candidates_router
 from app.routes.jobs import router as jobs_router
 from app.routes.matching import router as matching_router
+from app.routes.system import router as system_router
+
 
 __all__ = [
     "admin_applications_router",
@@ -16,4 +18,5 @@ __all__ = [
     "candidates_router",
     "jobs_router",
     "matching_router",
+    "system_router",
 ]

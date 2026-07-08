@@ -1,5 +1,18 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "/api";
+const DEFAULT_API_BASE_URL = "/api";
+
+function normalizeApiBaseUrl(value) {
+  const normalizedValue = value?.trim();
+
+  if (!normalizedValue) {
+    return DEFAULT_API_BASE_URL;
+  }
+
+  return normalizedValue.replace(/\/+$/, "");
+}
+
+const API_BASE_URL = normalizeApiBaseUrl(
+  import.meta.env.VITE_API_BASE_URL,
+);
 
 export class ApiError extends Error {
   constructor(message, status, details = null) {
@@ -11,7 +24,8 @@ export class ApiError extends Error {
 }
 
 async function parseResponse(response) {
-  const contentType = response.headers.get("content-type") ?? "";
+  const contentType =
+    response.headers.get("content-type") ?? "";
 
   if (!contentType.includes("application/json")) {
     return null;
@@ -69,7 +83,11 @@ export async function apiRequest(
         ? data.detail
         : "The request could not be completed.";
 
-    throw new ApiError(message, response.status, data);
+    throw new ApiError(
+      message,
+      response.status,
+      data,
+    );
   }
 
   return data;

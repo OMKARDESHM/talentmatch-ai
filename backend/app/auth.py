@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
-import os
 from typing import Annotated
-from dotenv import load_dotenv
+
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -9,19 +8,10 @@ from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.database import get_db
 from app.models import User, UserRole
 
-
-load_dotenv()
-
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-
-if not SECRET_KEY:
-    raise RuntimeError("JWT_SECRET_KEY is not configured")
-
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 password_hash = PasswordHash.recommended()
 
@@ -35,13 +25,19 @@ def hash_password(password: str) -> str:
     return password_hash.hash(password)
 
 
-def verify_password(password: str, hashed_password: str) -> bool:
-    return password_hash.verify(password, hashed_password)
+def verify_password(
+    password: str,
+    hashed_password: str,
+) -> bool:
+    return password_hash.verify(
+        password,
+        hashed_password,
+    )
 
 
 def create_access_token(user: User) -> str:
     expires_at = datetime.now(timezone.utc) + timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        minutes=settings.access_token_expire_minutes
     )
 
     payload = {
@@ -52,8 +48,8 @@ def create_access_token(user: User) -> str:
 
     return jwt.encode(
         payload,
-        SECRET_KEY,
-        algorithm=ALGORITHM,
+        settings.jwt_secret_key,
+        algorithm=settings.jwt_algorithm,
     )
 
 
@@ -70,8 +66,8 @@ def get_current_user(
     try:
         payload = jwt.decode(
             token,
-            SECRET_KEY,
-            algorithms=[ALGORITHM],
+            settings.jwt_secret_key,
+            algorithms=[settings.jwt_algorithm],
         )
         subject = payload.get("sub")
 
@@ -103,7 +99,9 @@ def require_admin(current_user: CurrentUser) -> User:
     return current_user
 
 
-def require_candidate(current_user: CurrentUser) -> User:
+def require_candidate(
+    current_user: CurrentUser,
+) -> User:
     if current_user.role != UserRole.CANDIDATE.value:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -114,4 +112,7 @@ def require_candidate(current_user: CurrentUser) -> User:
 
 
 AdminUser = Annotated[User, Depends(require_admin)]
-CandidateUser = Annotated[User, Depends(require_candidate)]
+CandidateUser = Annotated[
+    User,
+    Depends(require_candidate),
+]

@@ -3,17 +3,24 @@ from collections.abc import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-
-DATABASE_URL = "sqlite:///./talentmatch.db"
+from app.config import settings
 
 
 class Base(DeclarativeBase):
     pass
 
 
+engine_options: dict[str, object] = {}
+
+if settings.database_url.startswith("sqlite"):
+    engine_options["connect_args"] = {
+        "check_same_thread": False,
+    }
+
+
 engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    settings.database_url,
+    **engine_options,
 )
 
 SessionLocal = sessionmaker(

@@ -9,6 +9,9 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import LoadingScreen from "./components/LoadingScreen";
 import AppLayout from "./layouts/AppLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminJobsPage from "./pages/admin/AdminJobsPage";
+import CreateJobPage from "./pages/admin/CreateJobPage";
+import JobApplicationsPage from "./pages/admin/JobApplicationsPage";
 import CandidateDashboardPage from "./pages/candidate/CandidateDashboardPage";
 import CandidateProfilePage from "./pages/candidate/CandidateProfilePage";
 import JobMatchingPage from "./pages/candidate/JobMatchingPage";
@@ -84,6 +87,18 @@ export default function App() {
           <Route
             path="/admin"
             element={<AdminDashboardPage />}
+          />
+          <Route
+            path="/admin/jobs"
+            element={<AdminJobsPage />}
+          />
+          <Route
+            path="/admin/jobs/new"
+            element={<CreateJobPage />}
+          />
+          <Route
+            path="/admin/jobs/:jobId/applications"
+            element={<JobApplicationsPage />}
           />
         </Route>
       </Route>

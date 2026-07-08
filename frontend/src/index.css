@@ -998,3 +998,31 @@ p {
     flex-direction: column;
   }
 }
+
+.application-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.application-card {
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: var(--surface-color);
+}
+
+.snapshot-summary {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--surface-muted);
+}
+
+.snapshot-summary strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.snapshot-summary p {
+  margin: 0;
+}

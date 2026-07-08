@@ -10,6 +10,11 @@ function getNavigation(role) {
         to: "/admin",
         end: true,
       },
+      {
+        label: "Manage jobs",
+        to: "/admin/jobs",
+        end: false,
+      },
     ];
   }
 

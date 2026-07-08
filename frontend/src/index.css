@@ -1178,3 +1178,37 @@ p {
   flex-wrap: wrap;
   gap: 12px;
 }
+
+.app-error-screen {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 32px;
+  background: #f5f7fb;
+}
+
+.app-error-card {
+  display: grid;
+  width: min(100%, 520px);
+  gap: 24px;
+  border: 1px solid #e0e5ef;
+  border-radius: 18px;
+  padding: 36px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgb(30 42 75 / 8%);
+}
+
+.app-error-card h1 {
+  margin: 8px 0 12px;
+  color: #0f172a;
+}
+
+.app-error-description {
+  margin: 0;
+  color: #68738a;
+  line-height: 1.7;
+}
+
+.app-error-card .primary-button {
+  justify-self: start;
+}

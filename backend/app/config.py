@@ -72,6 +72,7 @@ class Settings:
     jwt_algorithm: str
     access_token_expire_minutes: int
     cors_origins: tuple[str, ...]
+    gemini_api_key: str
 
 
 def load_settings() -> Settings:
@@ -80,10 +81,8 @@ def load_settings() -> Settings:
             "DATABASE_URL",
             "sqlite:///./talentmatch.db",
         ),
-        jwt_secret_key=(
-            get_required_environment_variable(
-                "JWT_SECRET_KEY"
-            )
+        jwt_secret_key=get_required_environment_variable(
+            "JWT_SECRET_KEY"
         ),
         jwt_algorithm=os.getenv(
             "JWT_ALGORITHM",
@@ -96,6 +95,9 @@ def load_settings() -> Settings:
             )
         ),
         cors_origins=get_cors_origins(),
+        gemini_api_key=get_required_environment_variable(
+            "GEMINI_API_KEY"
+        ),
     )
 
 

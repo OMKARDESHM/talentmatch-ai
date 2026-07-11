@@ -21,6 +21,7 @@ jobs:
       DATABASE_URL: sqlite:///./talentmatch-ci.db
       ACCESS_TOKEN_EXPIRE_MINUTES: "60"
       CORS_ORIGINS: http://localhost:5173
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
     steps:
       - name: Checkout repository
